@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" href="../Scripts/themes/bootstrap/easyui.css">
+    <link rel="stylesheet" href="../Scripts/themes/icon.css">
+    <title></title>
+</head>
+<body>
+    <input type="text" id="mobile" onkeypress="test(event)"><br />
+    <input type="text"><br />
+    <input type="text"><br />
+    <input type="text"><br />
+    <input type="text"><br />
+    <input type="text"><br />
+    <input type="text"><br />
+    <input type="text"><br />
+    <input type="text"><br />
+
+
+    <input type="button" value="ttr" onclick="testD()"/>
+
+    <div id="materialsDict-dialog">
+        <table id="dictList" style="height: 380px; "></table>
+    </div>
+    <script type="text/javascript" src="../Scripts/jquery.min.js"></script>
+    <script type="text/javascript" src="../Scripts/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="../Scripts/jquery.easyui.min.js"></script>
+
+    <script>
+        var uri3 = '../../api/userinfo/GetUsers';
+        var uri4 = '../../api/userinfo/PostUser1';
+        $(function () {
+            $("#mobile").bind('keydown', function (e) {
+                if (e.keyCode == 13 || e.which == 13) {
+                    e.keyCode = 0;
+                }
+            })
+        })
+
+       
+
+        function testD() {
+            $("#materialsDict-dialog").show();
+            $("#materialsDict-dialog").dialog({
+                title: '根据供货单位选择物资字典',
+                width: 200,
+                height:200,
+                modal: true
+            });
+        }
+
+
+
+
+        //$(window).keydown(function (e) {
+        //    //var cur_focus = $(":focus");//获取当前获得焦点的表单元素
+        //    //if (e.keyCode == 13) {//当点击回车键
+        //    //    if (cur_focus.length == 0) {//如果没有表单元素获得焦点
+        //    //        $("#mobile").focus();//使第一个表单元素获得焦点
+        //    //    } else {//如果有表单元素获得焦点
+        //    //        var cur_focus_index = $(":text").filter(":focus").index();//找到当前获得焦点的表单元素在所有text表单元素的index
+        //    //        alert(cur_focus_index);
+        //    //        $(":text").eq(++cur_focus_index).focus();//使下一个表单元素获得焦点
+        //    //    }
+        //    //}
+        //   // var $inp = $("input[type!=hidden][readonly=false],select");
+        //   // var nxtIdx = $inp.index(thisobj) + 1;
+        //    if (e.keyCode == 13) {
+        //        //if ($inp.eq(nxtIdx) != null)
+        //        //      alert($inp.eq(nxtIdx)==undefined)
+        //        //    $inp.eq(nxtIdx).focus();
+        //      }
+
+        //});
+    </script>
+</body>
+    </html>

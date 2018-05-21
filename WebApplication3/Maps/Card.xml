@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<sqlMap namespace="Card" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+
+
+  <alias>
+    <!-- alias:取别名
+                    assembly:表示类所在的文件
+                    type:表示该类的完整的名称
+      -->
+    <typeAlias alias="Card" assembly="WebAPI3.Model" type="WebAPI3.Model.Card" />
+  </alias>
+
+
+
+  <statements>
+
+    <insert id="insert_CardOne" parameterClass="Card">
+
+      INSERT INTO Card(
+
+      [cardName],[userid]
+
+      )VALUES(
+
+      #CardName#,#UserId#
+
+      )
+      <selectKey  type="post" resultClass="int" property="Id">
+        SELECT CAST(@@IDENTITY as int) as Id
+      </selectKey>
+
+    </insert>
+
+  </statements>
+
+
+
+  <resultMaps >
+
+    <resultMap id="Card-result" class="Card">
+
+      <result property="Id" column="Id" />
+
+      <result property="CardName" column="CardName" />
+
+      <result property="UserId" column="UserId" />
+
+    </resultMap>
+
+  </resultMaps>
+
+</sqlMap>

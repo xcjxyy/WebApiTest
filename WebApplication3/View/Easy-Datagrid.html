@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="../Scripts/themes/bootstrap/easyui.css">
+    <link rel="stylesheet" href="../Scripts/themes/icon.css">
+    <link rel="stylesheet" href="../Scripts/themes/common.css">
+    <style>
+        .HH9{
+            float:left
+        }
+    </style>
+  
+        <title>Datagrid</title>
+</head>
+<body>
+    <div id="mainGrid"></div>
+    <div id="tB">
+        <div class="HH">
+            <a href="#" id="add" class="easyui-linkbutton" iconCls="icon-add" plain="true" >ADD</a>
+            <a href="#" id="edit"class="easyui-linkbutton" iconcls="icon-edit" plain="true">EDIT</a>
+            <a href="#" class="easyui-linkbutton" iconcls="icon-remove" plain="true">DEL</a>
+            <a href="#" id="save" class="easyui-linkbutton" iconcls="icon-save" plain="true">SAVE</a>
+            <a href="#" id="redo" class="easyui-linkbutton" iconcls="icon-redo" plain="true">REDO</a>
+            <a href="#" id="insert" class="easyui-linkbutton" iconcls="icon-add" plain="true">INSERT</a>
+        </div>
+        <div class="HH">
+            查询条件<input type="text" />
+            日期<input type="text" />
+            <a href="#" class="easyui-linkbutton" iconcls="icon-search" plain="true">查询</a>
+        </div>
+    </div>
+    <div id="mainDialog" class="public-dialog" style="display: none;">
+        <form id="mainForm" class="form-horizontal dialog-form" enctype="application/json">
+            <input type="hidden" id="mainForm-id" name="id" />
+            <fieldset class="areagroup1">
+                <div class="form-group">
+                    <label for="no" class="control-label">单据号码：</label>
+                    <input type="hidden" name="no" id="no" />
+                    <em id="no">-</em>
+                </div>
+                <div class="form-group">
+                    <label for="status" class="control-label">当前状态：</label>
+                </div>
+                <div class="form-group clear">
+                    <label for="invoiceNo" class="control-label">送货单号：</label>
+                    <input type="text" name="invoiceNo" placeholder="请扫码" id="invoiceNo" class="textbox" />
+                </div>
+                <div class="form-group">
+                    <label for="amountSum" class="control-label">总金额：</label>
+                    <em id="amountSum" class="textbox">-</em>
+                </div>
+                <div class="form-group">
+                    <label for="totalNumber" class="control-label">合计数量：</label>
+                    <em id="totalNumber" class="textbox">-</em>
+                </div>
+                <div class="form-group">
+                    <label for="warehouseId" class="control-label">库房：</label>
+                    <em id="warehouseName" class="textbox">库房</em>
+                    <input type="hidden" name="warehouseId" id="warehouseId" />
+                </div>
+                <div class="form-group">
+                    <label for="subjectId" class="control-label">核算科目：</label>
+                    <em id="subjectName" class="textbox"></em>
+                    <input type="hidden" name="subjectId" id="subjectId" />
+                </div>
+                <div class="form-group">
+                    <label for="businessTypeId" class="control-label"><em class="required">*</em>业务类型：</label>
+                    <input type="text" name="businessTypeId" class="textbox" id="businessTypeId" />
+                </div>
+                <div class="form-group">
+                    <label for="inTime" class="control-label"><em class="required">*</em>入库日期：</label>
+                    <input type="text" name="inTime" class="textbox" id="inTime" />
+                </div>
+                <div class="form-group" style="width:482px;">
+                    <label for="remark" class="control-label">备注：</label>
+                    <textarea class="textbox medium" id="remark" name="remark" rows="5" cols="63"></textarea>
+                </div>
+            </fieldset>
+            <fieldset class="areagroup2">
+                <div class="form-group">
+                    <label for="createTime" class="control-label">制单时间：</label>
+                    <em class="width130" id="createTime">-</em>
+                </div>
+                <div class="form-group">
+                    <label for="staffName" class="control-label">制单人：</label>
+                    <em class="width130" id="staffName">-</em>
+                </div>
+                <div class="form-group">
+                    <label for="auditDate" class="control-label">审核时间：</label>
+                    <em class="width130" id="auditDate">-</em>
+                </div>
+                <div class="form-group">
+                    <label for="auditorName" class="control-label">审核人：</label>
+                    <em class="width130" id="auditorName">-</em>
+                </div>
+
+            </fieldset>
+
+        </form>
+        <div id="formGrid" style="display: none;">
+        </div>
+    </div>
+        <div id="referDialog" style="display: none;">
+            <div id="referGrid" style="height: 380px; ">
+            </div>
+        </div>
+
+
+        <script type="text/javascript" src="../Scripts/sea.js"></script>
+        <script type="text/javascript" src="../Scripts/seajs.config.js"></script>
+        <script type="text/javascript">
+            seajs.use('../Scripts/easyUItest/Easy-Datagrid.js');
+        </script>
+
+
+</body>
+</html>

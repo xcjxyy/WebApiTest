@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="../Scripts/themes/bootstrap/easyui.css">
+    <link rel="stylesheet" href="../Scripts/themes/icon.css">
+    <link rel="stylesheet" href="../Scripts/themes/common8.css">
+        <title>Product App</title>
+</head>
+<body>
+   
+    <div>
+        <h2>Add USER</h2>
+      1 input框回车替代TAB
+      2 table自定义  行公式、列公式触发  参照触发
+      3 link按钮 
+    </div>
+    <div id="test-tool" class="model-tool tool-panel datagrid-toolbar">
+        <div class="toolTopBox">
+            <input type="text" name="warehouseId" id="warehouseSelect" />
+            <input type="text" name="subjectId" id="subjectSelect" />
+            <input type="text" name="status" id="statusSelect" />
+            <input type="text" name="start" id="startTime" />
+            <input type="text" name="end" id="endTime" />
+            <input type="text" id="search-keywords" name="query" />
+        </div>
+        <a id="btn-add">新增</a><a id="btn-edit">修改</a><a id="btn-initialStorage">期初入库</a>
+    </div>
+    <form id="user-form" name='articleForm' class="form-horizontal" >
+         <input type="text" id="mobile"><br />
+        <input type="text" id="startdate">
+        <input type="text" id="enddate"><br />
+        <input type="text"><br />
+        <div class="form-group">
+            <label for="Id" class="control-label"><em class="required">*</em>登录帐号： </label>
+            <input type="text" style="width:105px;" name="Id" id="Id" class="textbox medium">
+
+        </div>
+        <div class="form-group">
+            <label for="UserName" class="control-label"><em class="required">*</em>真实姓名： </label>
+            <input type="text" name="UserName" id="UserName" class="textbox medium">
+        </div>
+        <div class="form-group">
+            <label for="Age" class="control-label"><em class="required">*</em>Age：</label>
+            <input type="text" name="Age" id="Age" class="textbox medium">
+        </div>
+        <div class="form-group">
+            <label for="Item" class="control-label"><em class="required">*</em>Item：</label>
+            <input type="text" name="Item" id="Item" class="textbox medium">
+        </div>
+
+        <div style="overflow: auto; position: relative;" id="div_details" class="wh100">
+            <table id="table_details" class="table_details" cellpadding="0" cellspacing="0" style="table-layout: fixed;">
+                <colgroup>
+                    <col style="width: 20px;" />
+                    <col style="width: 70px;" id="COL_STANDBY_FLAG" />
+                    <col style="width: 100px;" id="COL_EXPENSE_FLAG" />
+                    <col style="width: 143px;" />
+                    <col style="width: 150px;" />
+
+                </colgroup>
+                <tr>
+                    <th cnname="序号" edit_status="true" id="aaaa1" ch_status="true" text_align="left"
+                        normal_status="true" columns="['HH']">
+                        &nbsp;
+                    </th>
+                    <th cnname="来源" edit_status="true" ch_status="true" text_align="center" normal_status="true"
+                        columns="['STANDBY_FLAG','STANDBY_FLAGNAME']">
+                        来源
+                    </th>
+                    <th cnname="科室定额" edit_status="true" ch_status="true" text_align="center" normal_status="true"
+                        columns="['FUND_ID','FUND_NAME']">
+                        科室定额项目
+                    </th>
+                    <th cnname="物资名称" edit_status="false" ch_status="true" text_align="left" normal_status="true"
+                        columns="['DEPRECIATION_MONTH','STOCK_IN_NO','ACC_ID2','ARCHIVES_ID','STOCK_ID','BARCODE1','STOCK_OUTS_ID','PRODUCT_ID','PRODUCE_ID','COMMENTS','PRODUCT_NAME']" id="COL_PRODUCT_NAME">
+                        物资名称
+                    </th>
+                    <th cnname="规格型号" edit_status="true" ch_status="true" text_align="left" normal_status="true" newrow=""
+                        columns="['SPEC_ID','SPEC_NAME']">
+                        规格型号
+                    </th>
+                </tr>
+            </table>
+
+        </div>
+
+        <div>
+            <input type="button" value="add" onclick="addrow(0);" />
+            <input type="button" value="add1" onclick="test(event);" />
+            <input type="button" value="add2"  />
+        </div>
+    </form>
+    <div id="materialsDict-dialog" style="display: none;">
+        <table id="dictList" style="height: 380px; "></table>
+    </div>
+    <script type="text/javascript" src="../Scripts/sea.js"></script>
+    <script type="text/javascript" src="../Scripts/seajs.config.js"></script>
+    <script type="text/javascript">
+        seajs.use('../Scripts/js/inputtable');
+    </script>
+</body>
+</html>

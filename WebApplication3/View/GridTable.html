@@ -1,0 +1,162 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="../Scripts/themes/bootstrap/easyui.css">
+    <link rel="stylesheet" href="../Scripts/themes/icon.css">
+    <link rel="stylesheet" href="../Scripts/themes/common.css">
+
+    <title>List</title>
+</head>
+<body>
+    <div id="test-tool" class="model-tool tool-panel datagrid-toolbar">
+        <div class="toolTopBox">
+            <input type="text" name="warehouseId" id="warehouseSelect" />
+            <input type="text" name="subjectId" id="subjectSelect" />
+            <input type="text" name="status" id="statusSelect" />
+            <input type="text" name="start" id="startTime" />
+            <input type="text" name="end" id="endTime" />
+            <input type="text" id="search-keywords" name="query" />
+        </div>
+        <a id="btn-add">新增</a><a id="btn-edit">修改</a><a id="btn-delete">删除</a><a id="btn-audit">审核</a>
+    </div>
+    <div id="mainGrid"></div>
+    <div id="mainDialog" class="public-dialog" style="display: none;">
+        <form id="mainForm" class="form-horizontal dialog-form" enctype="application/json">
+            <input type="hidden" id="mainForm-id" name="id" />
+            <fieldset class="areagroup1">
+                <div class="form-group">
+                    <label for="no" class="control-label">单据号码：</label>
+                    <input type="hidden" name="no" id="no" />
+                    <em id="no">-</em>
+                </div>
+                <div class="form-group">
+                    <label for="status" class="control-label">当前状态：</label>
+                </div>
+                <div class="form-group clear">
+                    <label for="invoiceNo" class="control-label">送货单号：</label>
+                    <input type="text" name="invoiceNo" placeholder="请扫码" id="invoiceNo" class="textbox" />
+                </div>
+                <div class="form-group">
+                    <label for="amount" class="control-label">总金额：</label>
+                    <em id="amount" class="textbox">-</em>
+                </div>
+                <div class="form-group">
+                    <label for="totalNumber" class="control-label">合计数量：</label>
+                    <em id="totalNumber" class="textbox">-</em>
+                </div>
+                <div class="form-group">
+                    <label for="warehouseId" class="control-label">库房：</label>
+                    <em id="warehouseName" class="textbox">库房</em>
+                    <input type="hidden" name="warehouseId" id="warehouseId" />
+                </div>
+                <div class="form-group">
+                    <label for="subjectId" class="control-label">核算科目：</label>
+                    <em id="subjectName" class="textbox"></em>
+                    <input type="hidden" name="subjectId" id="subjectId" />
+                </div>
+                <div class="form-group">
+                    <label for="businessTypeId" class="control-label"><em class="required">*</em>业务类型：</label>
+                    <input type="text" name="businessTypeId" class="textbox" id="businessTypeId" />
+                </div>
+                <div class="form-group" id="supplierId-form-group">
+                    <label for="supplierId" class="control-label"><em class="required">*</em>供货单位：</label>
+                    <input type="text" name="supplierId" id="supplierId" class="textbox" placeholder="输入关键字或拼音码" />
+                </div>
+                <div class="form-group" id="hospitalId-form-group">
+                    <label for="hospitalId" class="control-label"><em class="required">*</em>借还单位：</label>
+                    <input type="text" name="hospitalId" id="hospitalId" class="textbox" placeholder="输入关键字或拼音码" />
+                </div>
+                <div class="form-group" id="sourceWarehouseId-form-group">
+                    <label for="sourceWarehouseId" class="control-label"><em class="required">*</em>调拨库房：</label>
+                    <input type="hidden" name="sourceWarehouseId" id="sourceWarehouseId" class="textbox" />
+                    <em id="sourceWarehouseName" class="textbox">-</em>
+                </div>
+                <div class="form-group dn" id="donatedSupplierId-form-group">
+                    <label for="donatedSupplierId" class="control-label"><em class="required">*</em>其他单位：</label>
+                    <input type="text" name="donatedSupplierId" id="donatedSupplierId" class="textbox" placeholder="输入关键字或拼音码" />
+                </div>
+                <div class="form-group dn">
+                    <label for="fundSource" class="control-label">经费来源：</label>
+                    <input type="text" id="fundSource" name="fundSource" />
+                </div>
+                <div class="form-group">
+                    <label for="inTime" class="control-label"><em class="required">*</em>入库日期：</label>
+                    <input type="text" name="inTime" class="textbox" id="inTime" />
+                </div>
+                <div class="form-group">
+                    <label for="paymentMethod" class="control-label">支付方式：</label>
+                    <input type="text" id="paymentMethod" class="textbox" name="paymentMethod" />
+                </div>
+                <div class="form-group" style="width:482px;">
+                    <label for="remark" class="control-label">备注：</label>
+                    <textarea class="textbox medium" id="remark" name="remark" rows="5" cols="63"></textarea>
+                </div>
+            </fieldset>
+            <fieldset class="areagroup2">
+                <div class="form-group">
+                    <label for="createTime" class="control-label">制单时间：</label>
+                    <em class="width130" id="createTime">-</em>
+                </div>
+                <div class="form-group">
+                    <label for="staffName" class="control-label">制单人：</label>
+                    <em class="width130" id="staffName">-</em>
+                </div>
+                <div class="form-group">
+                    <label for="auditDate" class="control-label">审核时间：</label>
+                    <em class="width130" id="auditDate">-</em>
+                </div>
+                <div class="form-group">
+                    <label for="auditorName" class="control-label">审核人：</label>
+                    <em class="width130" id="auditorName">-</em>
+                </div>
+
+            </fieldset>
+
+        </form>
+        <div id="formGrid">
+            <table id="table_details" class="table_details" cellpadding="0" cellspacing="0" style="table-layout: fixed;">
+                <colgroup>
+                    <col style="width: 20px;" />
+                    <col style="width: 70px;" id="COL_STANDBY_FLAG" />
+                    <col style="width: 100px;" id="COL_EXPENSE_FLAG" />
+                    <col style="width: 143px;" />
+                    <col style="width: 150px;" />
+
+                </colgroup>
+                <tr>
+                    <th cnname="序号" edit_status="true" id="aaaa1" ch_status="true" text_align="left"
+                        normal_status="true" columns="['HH']">
+                        &nbsp;
+                    </th>
+                    <th cnname="来源" edit_status="true" ch_status="true" text_align="center" normal_status="true"
+                        columns="['STANDBY_FLAG','STANDBY_FLAGNAME']">
+                        来源
+                    </th>
+                    <th cnname="科室定额" edit_status="true" ch_status="true" text_align="center" normal_status="true"
+                        columns="['FUND_ID','FUND_NAME']">
+                        科室定额项目
+                    </th>
+                    <th cnname="物资名称" edit_status="false" ch_status="true" text_align="left" normal_status="true"
+                        columns="['DEPRECIATION_MONTH','STOCK_IN_NO','ACC_ID2','ARCHIVES_ID','STOCK_ID','BARCODE1','STOCK_OUTS_ID','PRODUCT_ID','PRODUCE_ID','COMMENTS','PRODUCT_NAME']" id="COL_PRODUCT_NAME">
+                        物资名称
+                    </th>
+                    <th cnname="规格型号" edit_status="true" ch_status="true" text_align="left" normal_status="true" newrow=""
+                        columns="['SPEC_ID','SPEC_NAME']">
+                        规格型号
+                    </th>
+                </tr>
+            </table>
+        </div>
+        <div id="referGrid"></div>
+
+    </div>
+
+    <script type="text/javascript" src="../Scripts/sea.js"></script>
+    <script type="text/javascript" src="../Scripts/seajs.config.js"></script>
+    <script type="text/javascript">
+        seajs.use('../Scripts/js/GridTable.js');
+    </script>
+
+</body>
+</html>

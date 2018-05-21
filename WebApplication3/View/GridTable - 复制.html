@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="../Scripts/themes/bootstrap/easyui.css">
+    <link rel="stylesheet" href="../Scripts/themes/icon.css">
+    <link rel="stylesheet" href="../Scripts/themes/common.css">
+  
+        <title>List</title>
+</head>
+<body>
+    <div id="test-tool" class="model-tool tool-panel datagrid-toolbar">
+        <div class="toolTopBox">
+            <input type="text" name="warehouseId" id="warehouseSelect" />
+            <input type="text" name="subjectId" id="subjectSelect" />
+            <input type="text" name="status" id="statusSelect" />
+            <input type="text" name="start" id="startTime" />
+            <input type="text" name="end" id="endTime" />
+            <input type="text" id="search-keywords" name="query" />
+        </div>
+        <a id="btn-add">新增</a><a id="btn-edit">修改</a><a id="btn-delete">删除</a><a id="btn-audit">审核</a>
+    </div>
+    <div id="mainGrid"></div>
+    
+
+    <script type="text/javascript" src="../Scripts/sea.js"></script>
+    <script type="text/javascript" src="../Scripts/seajs.config.js"></script>
+    <script type="text/javascript">
+        seajs.use('../Scripts/js/GridTable123.js');
+    </script>
+
+</body>
+</html>

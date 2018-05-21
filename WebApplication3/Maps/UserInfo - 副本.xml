@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<sqlMap namespace="UserInfo" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+
+
+  <alias>
+    <!-- alias:取别名
+                    assembly:表示类所在的文件
+                    type:表示该类的完整的名称
+      -->
+    <typeAlias alias="UserInfo" assembly="WebAPI3.Model" type="WebAPI3.Model.UserInfo" />
+  </alias>
+  <statements>
+    <select id="select_UserInfoAll_Hash" resultClass="HashTable">
+      select a.Id,a.UserName,a.Age,b.cardname
+      from UserInfo a inner join card b on a.id=b.userid
+    </select>
+    <select id="select_UserInfoAll" resultMap="UserInfo-result">
+      select Id,UserName,Age
+      from UserInfo
+    </select>
+    <insert id="insert_UserInfoOne" parameterClass="UserInfo">
+      INSERT INTO UserInfo(
+      [UserName],[Age]
+      )VALUES(
+      #UserName#,#Age#
+      )
+      <selectKey  type="post" resultClass="int" property="Id">
+        SELECT CAST(@@IDENTITY as int) as Id
+      </selectKey>
+    </insert>
+    <delete id="del_UserInfoOne" parameterClass="UserInfo">
+      <![CDATA[ 
+        DELETE UserInfo
+      ]]>
+      <dynamic prepend="WHERE">
+        Id = #Id#
+      </dynamic>
+    </delete>
+
+    <select id="select_UserInfoOne" resultMap="UserInfo-result">
+      select * from UserInfo
+      <dynamic prepend="where">
+        <isParameterPresent property="id" prepend="WHERE">
+          [Id] = #Id#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+
+    <update id="update_UserInfoOne" parameterClass="UserInfo">
+      <![CDATA[ 
+        UPDATE UserInfo
+        SET
+          UserName = #UserName#,
+          Age = #Age#,
+          SessionKey = #SessionKey#
+      ]]>
+      <dynamic prepend="WHERE">
+        Id = #Id#
+      </dynamic>
+    </update>
+    <parameterMaps>
+      <!--parameterMap id="sp_select_user_param" class="WebAPI3.Model.PageCriteria">
+        <parameter property="userid" column=""/>
+        <parameter property="RecordCount" direction="Output" column="RecordCount"   /-->
+      <!--/parameterMap-->
+    </parameterMaps>
+    <procedure id="sp_select_user"  parameterMap="sp_select_user_param" resultClass="Hashtable" >
+      [dbo].[sp_select_user]
+    </procedure>
+    <procedure id="sp_select_user0"   resultClass="Hashtable" >
+      [dbo].[sp_select_user0]
+    </procedure>
+  </statements>
+
+  <resultMaps >
+    <resultMap id="UserInfo-result" class="UserInfo">
+      <result property="Id" column="Id" />
+      <result property="UserName" column="UserName" />
+      <result property="Age" column="Age" />
+      <result property="SessionKey" column="SessionKey" />
+    </resultMap>
+
+  </resultMaps>
+
+</sqlMap>

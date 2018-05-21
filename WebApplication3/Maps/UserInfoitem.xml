@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<sqlMap namespace="UserInfoItem" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+
+
+  <alias>
+    <!-- alias:取别名
+                    assembly:表示类所在的文件
+                    type:表示该类的完整的名称
+      -->
+    <typeAlias alias="UserInfoItem" assembly="WebAPI3.Model" type="WebAPI3.Model.UserInfoItem" />
+  </alias>
+
+
+
+  <statements>
+
+    
+    <insert id="insert_UserInfoItem" parameterClass="UserInfoItem">
+      INSERT INTO UserInfoItem(
+      [Id],[Address]
+      )VALUES(
+      #Id#,#Address#
+      )    
+    </insert>
+
+    
+
+   
+
+  </statements>
+
+
+
+  <resultMaps >
+
+    <resultMap id="UserInfoItem-result" class="UserInfoItem">
+
+      <result property="Id" column="Id" />
+
+      <result property="Address" column="Address" />
+
+    </resultMap>
+
+  </resultMaps>
+
+</sqlMap>

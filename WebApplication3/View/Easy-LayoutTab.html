@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="../Scripts/themes/bootstrap/easyui.css">
+    <link rel="stylesheet" href="../Scripts/themes/icon.css">
+    <link rel="stylesheet" href="../Scripts/themes/common.css">
+    <title>Product App</title>
+</head>
+<body id="body" class="easyui-layout">
+    <div>
+        1、layout方法   north属性split：false固定 west为true区别 
+        2、Tab方法
+        3、north区域ul项目css  float显示横向
+    </div>
+    <div data-options="region:'north',title:'header',split:false,noheader:true" id="viewFramework-header">
+        <div class="logo">
+            XXXsystem          
+        </div>
+        <ul id="headerinfo">
+            <li><span id="login-name"></span>，您好！</li>
+            <li>
+                <a href="#" id="changgeDept-btn" title="切换科室-角色"><i></i><span id="role-name">切换</span></a>
+            </li>
+            <li>
+                <a href="HtmlPage1.html" id="logout" title="退出"><i></i>退出</a>
+            </li>
+            <li>
+                <a href="statics/helpcenter/index.html" id='helpcenter' title="帮助" target='_blank'><i></i>帮助</a>
+            </li>
+        </ul>
+        <div id="change-user-dialog"></div>
+        <div id="header-menu-tabs"></div>
+    </div>
+    <div id="sidebar" data-options="region:'west',title:'PP&nbsp;',split:true,iconCls:'icon-world',collapsed:true">
+        <div id="nav-aside">
+            <!--  侧边导航 -->
+        </div>
+    </div>
+
+    <div class="viewFramework-maincontent" data-options="region:'center'" id="content" style="border: 0 none;">
+        <div id="viewFramework-tabs">
+            <div title="欢迎使用" class="control-box" closable="false">               
+            </div>
+        </div>
+    </div>
+
+    <div id="copyright" data-options="region:'south',title:'footer',split:false,noheader:true"> &copy;2016可见在css控制</div>
+
+    <script type="text/javascript" src="../Scripts/sea.js"></script>
+    <script type="text/javascript" src="../Scripts/seajs.config.js"></script>
+    <script type="text/javascript">
+        seajs.use('../Scripts/js/EasyLayout.js');
+    </script>
+
+</body>
+
+</html>

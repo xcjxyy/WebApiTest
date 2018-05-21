@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="../Scripts/themes/bootstrap/easyui.css">
+    <link rel="stylesheet" href="../Scripts/themes/icon.css">
+    <title>Product App</title>
+</head>
+<body>
+    <div id="materialsDict-dialog">
+        <table id="dictList" style="height: 380px; "></table>
+    </div>
+    <div>
+        <h2>All Products</h2>
+        <ul id="products" />
+    </div>
+    <div>
+        <h2>Search by ID</h2>
+        <input type="text" id="prodId" size="55" />
+        <input type="button" value="Search" onclick="find();" />
+        <input type="button" value="Search2" onclick="dl();" />
+        <p id="product" />
+    </div>
+    <div>
+        <table id="table1"></table>
+        <span>wwwtabb</span>
+    </div>
+    <script type="text/javascript" src="../Scripts/jquery.min.js"></script>
+    <script type="text/javascript" src="../Scripts/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="../Scripts/jquery.easyui.min.js"></script>
+   
+    <script>
+        var uri = '../api/userinfo/GetAllProducts123';
+        var uri2 = '../api/userinfo/PutAllProducts123';
+        var uri3 = '../../api/userinfo/GetUsers';
+        $(document).ready(function () {
+            // Send an AJAX request
+            $.getJSON(uri3)
+                .done(function (data) {
+                    // On success, 'data' contains a list of products.
+                    $.each(data, function (key, item) {
+                        // Add a list item for the product.
+                        $('<li>', { text: formatItem(item) }).appendTo($('#products'));
+                    });
+                });
+
+            $('#table1').datagrid({
+                url: uri3,
+                method:'GET',
+                striped:true,
+                toolbar: [{
+                    iconCls: 'icon-edit',
+                    handler: function () { alert('编辑按钮') }
+                }, '-', {
+                    iconCls: 'icon-help',
+                    handler: function () { alert('帮助按钮') }
+                }],
+
+        //        data: [
+		//{ Id: 'value11', UserName: 'value12', Age: 12 },
+		//{ Id: 'value21', UserName: 'value22', Age: 33 },
+        //{ Id: 'value11', UserName: 'value12', Age: 12 },
+		//{ Id: 'value21', UserName: 'value22', Age: 33 },
+        //{ Id: 'value11', UserName: 'value12', Age: 12 },
+		//{ Id: 'value21', UserName: 'value22', Age: 33 }
+        //        ],
+
+                columns: [[
+                    { field: 'Id', title: 'Id', width: 100 },
+                    { field: 'UserName', title: '姓名', width: 100 },
+                    { field: 'Age', title: '年龄', width: 100, align: 'right', width: 100 }
+                ]]
+            });
+
+        });
+
+        function formatItem(item) {
+            //return item.Name + ': $' + item.Price;
+            return item.UserName + '--id:'+item.Id+'--age:' + item.Age;
+        }
+
+        function find() {
+            var id = $('#prodId').val();
+            $.getJSON(uri + '/' + id)
+                .done(function (data) {
+                    $('#product').text(formatItem(data));
+                })
+                .fail(function (jqXHR, textStatus, err) {
+                    $('#product').text('Error: ' + err);
+                });
+        }
+
+        function dl() {
+            $("#materialsDict-dialog").show();
+            $("#materialsDict-dialog").dialog({
+                title: '根据供货单位选择物资字典',
+                width: 200,
+                height: 200,
+                modal: true
+            });
+        }
+    </script>
+</body>
+</html>
