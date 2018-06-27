@@ -12,16 +12,7 @@ namespace WebAPI3.Model
         public int Id { get; set; }
         public string UserName { get; set; }
         public int Age { get; set; }
-
-        //private UserInfoItem userItem;// = new UserInfoItem();
-        //public List<UserInfoItem> _items = new List<UserInfoItem>();
-        //public List<UserInfoItem> Items { set; get; }
-        //public void setItems(List<UserInfoItem> items) { this._items = items; }
-        //public List<UserInfoItem> getItems() { return _items; }
-
-        //public void setUserItem(UserInfoItem userItem) { this.userItem = userItem; }
-        //public UserInfoItem getUserItem() { return userItem; }
-
+        public List<Card> Cards { set; get; }
         public string SessionKey { get; set; }
         //public DateTime ExpiredTime { get; set; }
         //public DateTime CreateTime { get; set; }

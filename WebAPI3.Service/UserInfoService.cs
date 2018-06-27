@@ -14,13 +14,30 @@ namespace WebAPI3.Service
     {
         public int UserInfoInsertOne(UserInfo userInfo)
         {
-            //Object obj = Mapper.GetMaper.Insert("UserInfo.insert_UserInfoOne", userInfo);
-            Object obj = SqlAdapter.ExecuteInsert("UserInfo.insert_UserInfoOne", userInfo);
-            IList<iBatisStatement> il=new List<iBatisStatement>();
-            //il.Add(new IBatisNetBatchStatement { StatementName = "UserInfo.insert_UserInfoOne", ParameterObject = userInfo, Type = SqlExecuteType.INSERT });
-            //SqlAdapter.ExecuteBatch(il);
-            //return 1;
-            return (int)obj;
+            //Object obj = Mapper.GetMaper.Insert("UserInfo.insert_UserInfoOne", userInfo); //****转SqlAdapter调用，不直接调用Mapper
+
+            Hashtable ht = new Hashtable();
+            ht["DjName"] = "userinfo";
+            ht["DjLsh"] = 0;
+            this.GetDjlsh(ht);
+            userInfo.Id = (int)ht["DjLsh"];
+
+            IList<iBatisStatement> il = new List<iBatisStatement>();
+            il.Add(new iBatisStatement { StatementName = "UserInfo.insert_UserInfoOne", ParameterObject = userInfo, Type = SqlExecuteType.INSERT });
+            for (int i = 0; i < userInfo.Cards.Count; i++)
+            {
+                il.Add(new iBatisStatement { StatementName = "Card.insert_CardOne", ParameterObject = userInfo.Cards[i], Type = SqlExecuteType.INSERT });
+            };
+
+            try
+            {
+                SqlAdapter.ExecuteBatch(il);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return 1;
         }
         public void UserInfoItemInsertOne(UserInfoItem userInfoItem)
         {
@@ -133,6 +150,19 @@ namespace WebAPI3.Service
     //        }
     //        return ok;
     //    }
+
+
+        public UserInfo GetUserInfo2(int id)
+        {
+            //throw new NotImplementedException();
+            UserInfo user = new UserInfo();
+            user = (UserInfo)Mapper.GetMaper.QueryForObject("UserInfo.select_UserInfoOne2", id);
+            if (user == null)
+            { throw new ApiException("NND", "kk"); }
+
+            return user;
+
+        }
     }
 
 }

@@ -12,25 +12,17 @@
     <typeAlias alias="Card" assembly="WebAPI3.Model" type="WebAPI3.Model.Card" />
   </alias>
 
-
-
   <statements>
 
     <insert id="insert_CardOne" parameterClass="Card">
-
       INSERT INTO Card(
-
       [cardName],[userid]
-
       )VALUES(
-
-      #CardName#,#UserId#
-
+      #CardName#,#User.Id#
       )
       <selectKey  type="post" resultClass="int" property="Id">
         SELECT CAST(@@IDENTITY as int) as Id
       </selectKey>
-
     </insert>
 
   </statements>
@@ -40,13 +32,9 @@
   <resultMaps >
 
     <resultMap id="Card-result" class="Card">
-
       <result property="Id" column="Id" />
-
       <result property="CardName" column="CardName" />
-
-      <result property="UserId" column="UserId" />
-
+      <result property="User.Id" column="UserId" />
     </resultMap>
 
   </resultMaps>

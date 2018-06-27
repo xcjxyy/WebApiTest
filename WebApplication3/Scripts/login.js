@@ -6,7 +6,7 @@ define(function (require, exports, module) {
     require('cookie');
     require('easyui');
     require('easyuiCN');
-    var Common = require('commonwidget');//exports.model时需要用变量来接
+    var Common = require('common');//exports.model时需要用变量来接
 
     var loginJs = {
         _init: function () {

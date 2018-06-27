@@ -104,6 +104,12 @@ namespace WebAPI3.Controllers
            return new ResponseDTO(true,"OK",logUser);
          
         }
+        [HttpGet]
+        public ResponseDTO Logout()
+        {
+            return new ResponseDTO(true, "OK", null);
+
+        }
 
         public void UserInsert(UserInfo userInfo)
         {
@@ -139,5 +145,34 @@ namespace WebAPI3.Controllers
             SqlAdapter.ExecuteBatch(ibs);//事务批处理sql语句
 
         }
+         [HttpGet, Route("api/userinfo/UserInsert2")]
+        public void UserInsert2()
+        {
+            UserInfo user1 = new UserInfo();
+            user1.UserName = "lulatestuser";
+            user1.Age = 45;
+            Card card1 = new Card();
+            card1.CardName = "card311";
+            card1.User = user1;
+            Card card2 = new Card();
+            card2.CardName = "card312";
+            card2.User = user1;
+            List<Card> cards = new List<Card>() { card1, card2 };
+            user1.Cards = cards;
+            //Hashtable ht = new Hashtable();
+            //ht["DjName"] = "userinfo";
+            //ht["DjLsh"] = 0;
+            //uss.GetDjlsh(ht);//调用sp产生 djlsh            
+            //user1.Id = (int)ht["DjLsh"];
+            uss.UserInfoInsertOne(user1);//使用ibaits插入主从表；
+
+        }
+         [HttpGet, Route("api/userinfo/GetUsers2")]
+         public UserInfo GetUsers2(int id)
+         {
+             id = 109;
+             UserInfo user = uss.GetUserInfo2(id);//使用ibaits一对多方式查询对象；具体查看userinfo.xml一对多的配置
+             return user;
+         }
     }
 }

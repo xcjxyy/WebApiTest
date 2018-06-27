@@ -178,6 +178,7 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\easyUItest\Easy-Datagrid - 复制.js" />
     <Content Include="Scripts\easyUItest\Easy-Datagrid.js" />
+    <Content Include="Scripts\easyUItest\JavaScript1.js" />
     <Content Include="Scripts\jquery.easyui.min修改sessionkey.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -548,6 +549,7 @@
     </None>
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -82,7 +82,7 @@ body {
 }
 
 #login-panel form .loginNoIcon {
-    background: url(../images/login-ico.png) no-repeat 10px 5px;
+    background: url(../../images/login-ico.png) no-repeat 10px 5px;
     width: 56px;
     position: absolute;
     top: 3px;
@@ -91,7 +91,7 @@ body {
 }
 
 #login-panel form .passwdIcon {
-    background: url(../images/login-ico.png) no-repeat 10px -50px;
+    background: url(../../images/login-ico.png) no-repeat 10px -50px;
     width: 56px;
     position: absolute;
     top: 2px;

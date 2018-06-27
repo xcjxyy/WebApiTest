@@ -1,7 +1,9 @@
 ﻿define(function (require, exports, module) {
     require('jquery');
+    require('cookie');
     require('easyui');
     require('easyuiCN');
+    var common = require('common');
 
 
     var initMenus = [{ componentName: "L1-1", parentId: "application", id: "application.applicationManage", url: null, componentId: "applicationManage", permision: false, index: 1, type: "1" },  // permision: false, index: 1, type: "1"  无用
@@ -156,8 +158,56 @@
     //        }
     //    }]
     //});
-
-
+    
+    var logout = function () {
+        //CommonWidget.widgetUserCheckLogin();
+        var user = JSON.parse($.cookie("loginInfo")) || {};
+        // 获取登录信息
+        user.name = user.name || user.loginNo;
+        $('#login-name').text(user.name);
+        var deptName = user.currentDept ? user.currentDept.name : '';
+        var roleName = user.currentRole ? user.currentRole.name : '';
+        $('#role-name').text(
+            deptName + (deptName != '' && roleName != '' ? '-' : '') + roleName);
+        // 注销
+        $('#logout').bind('click', function (e) {
+            $.messager.confirm("确认提示", '您确认要退出系统？', function (b) {
+                if (b) {
+                    e.preventDefault();
+                    $.ajax({
+                        type: "GET",
+                        url: '../api/userinfo/Logout',    // '/admin/logout'后台清除session对象
+                        dataType: "json",
+                        success: function (responseData) {
+                            if (responseData.success) {
+                                // 提示退出成功
+                                common.showMsg({
+                                    title: '提示信息common',
+                                    msg: '你已退出系统，2秒后将自动跳转至登录页面',
+                                    timeout: 0,
+                                    showType: 'show',
+                                    style: {
+                                        right: '',
+                                        bottom: ''
+                                    }
+                                });
+                                setTimeout(function () {
+                                    location.href = 'login.html';
+                                }, 2000);
+                            } else {
+                                common.showMsg({
+                                    title: '提示信息',
+                                    msg: '退出失败！'
+                                }, 'warning');
+                            }
+                        },
+                        error: common.handleError
+                    });
+                }
+            });
+        });
+    };
+    logout();
     $(window).resize();
 
 

@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI3.Service", "WebAPI3.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI3.Core", "WebAPI3.Core\WebAPI3.Core.csproj", "{45A28B5D-9FB3-4F49-81AC-04991202857E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI3test", "WebAPI3test\WebAPI3test.csproj", "{2AF76025-981F-4CB8-ADC8-1A4398B3EE66}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{45A28B5D-9FB3-4F49-81AC-04991202857E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45A28B5D-9FB3-4F49-81AC-04991202857E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45A28B5D-9FB3-4F49-81AC-04991202857E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AF76025-981F-4CB8-ADC8-1A4398B3EE66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AF76025-981F-4CB8-ADC8-1A4398B3EE66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AF76025-981F-4CB8-ADC8-1A4398B3EE66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AF76025-981F-4CB8-ADC8-1A4398B3EE66}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

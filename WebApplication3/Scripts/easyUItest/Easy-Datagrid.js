@@ -6,7 +6,7 @@
     var common = require('common');
 
     var $lastInp = null;//最后一个input对象
-    function enterKeyTest() {
+    function enterKey() {
         var $inp = $('#mainDialog :input:text[type!=hidden][readonly!=true]');
             $inp.bind('keyup', function (e) {
             var key = e.which;
@@ -49,6 +49,9 @@
         });
         return dataList;
     }
+    /**dom对象命名  pageList pageDetail form   dialog  grid  btn  inp  combo  date   icon  img
+    */
+
     var $formMain = $('#mainForm');
     var $referDialog = $('#referDialog');
     var $tableIdMain = $('#mainGrid');
@@ -61,6 +64,9 @@
     var $tableIdForm = $('#formGrid');
     var $referGrid = $('#referGrid');
     var $amountSum = $('#amountSum');
+    var $dateCondition = $('#dateCondition');
+    var $selectStatus = $('#selectStatus');
+    var $buzType = $('#buzType');
     //主页面
     var mainPage = {
         bindEvents: function () {
@@ -69,7 +75,8 @@
                 $('#mainDialog').dialog({
                     title: 'title',
                     modal: true,
-                    // maximized: true,
+                    maximizable:true,
+                    //maximized: true,
                     contentType: 'application/json',
                     buttons: [{
                         id: 'btn-addRow',
@@ -98,16 +105,32 @@
 
                 mainForm.formGridInit();
                 $("#mainDialog :input:text[type!='hidden']:first").focus();
-                
-            })
+
+            });
             $('#insert').bind('click', function () {
                 //insertRow方法在头部增加
                 //$('#mainGrid').datagrid('insertRow', { index: 0, row: {}});
                 //$('#mainGrid').datagrid('beginEdit', 0);
                 //appendRow方法在尾部增加
-                $tableIdMain.datagrid('appendRow', {});
-                var lastIndex = $('#mainGrid').datagrid('getRows').length - 1;
-                $tableIdMain.datagrid('beginEdit', lastIndex);
+                //$tableIdMain.datagrid('appendRow', {});
+                //var lastIndex = $('#mainGrid').datagrid('getRows').length - 1;
+                //$tableIdMain.datagrid('beginEdit', lastIndex);
+                alert("GETIIIII")
+                $.ajax({
+                    method: 'GET',
+                    url: '../api/userinfo/GetUsers2?id=109',
+                    dataType: "json",
+                    //data: options.data,
+                    async: false,
+                    success: function (data) {
+                        //if (response.success === true) {
+                        //dataList = data;
+                        ////} else {
+                        //    dataList = [];
+                        //}
+                    },
+                    error: function () { alert("!!CommonWidget.handleError"); }
+                });
 
             });
             $('#edit').bind('click', function () {
@@ -136,6 +159,23 @@
             });
         },
         init: function () {
+            var _date=new Date().format('yyyy-mm-dd');
+            $dateCondition.datebox({
+                width: 100,
+                editable: true,
+                required: true,
+                value:_date,
+            });
+
+            $selectStatus.combobox({
+                width: 100,
+                textField: 'name',
+                valueField: 'id',
+                required: true
+            });
+            var data = [{ name: "制单", id: "0" }, { name: "审核", id: "1" }];
+            $selectStatus.combobox('loadData', data);
+
             var tableColumns = [];
             tableColumns.push({
                 field: 'id',
@@ -225,20 +265,26 @@
     };
     //单据窗口
     var mainForm = {
+        girdEditorInit: function () {
+            this.price = [];
+            this.num = [];
+            this.amount = [];
+            this.productName = [];
+        },
         girdEditor: function (rowIndex) {
-            this.price = $tableIdForm.datagrid('getEditor', {
+            this.price[rowIndex] = $tableIdForm.datagrid('getEditor', {
                 index: rowIndex,
                 field: 'price'
             });
-            this.num = $tableIdForm.datagrid('getEditor', {
+            this.num[rowIndex] = $tableIdForm.datagrid('getEditor', {
                 index: rowIndex,
                 field: 'num'
             });
-            this.amount = $tableIdForm.datagrid('getEditor', {
+            this.amount[rowIndex] = $tableIdForm.datagrid('getEditor', {
                 index: rowIndex,
                 field: 'amount'
             });
-            this.productName = $tableIdForm.datagrid('getEditor', {
+            this.productName[rowIndex] = $tableIdForm.datagrid('getEditor', {
                 index: rowIndex,
                 field: 'productName'
             });
@@ -247,30 +293,12 @@
         gridGS: function (rowIndex) {
             var that = this;
             (function(){
-                var _amount = Number($(that.num.target).val() * $(that.price.target).val());
-                $(that.amount.target).val(_amount);
+                var _amount = Number($(that.num[rowIndex].target).val() * $(that.price[rowIndex].target).val());
+                $(that.amount[rowIndex].target).val(_amount);
             })();
 
         },
-        gridGS0: function (rowIndex) {
-            var price = $tableIdForm.datagrid('getEditor', {
-                index: rowIndex,
-                field: 'price'
-            });
-            var num = $tableIdForm.datagrid('getEditor', {
-                index: rowIndex,
-                field: 'num'
-            });
-            var amount = $tableIdForm.datagrid('getEditor', {
-                index: rowIndex,
-                field: 'amount'
-            });
-            (function () {
-                var _amount = Number($(num.target).val() * $(price.target).val());
-                $(amount.target).val(_amount);
-            })();
 
-        },
         //表头求和公式
         headProcessData: function () {
             var rows = $tableIdForm.datagrid('getRows') && $tableIdForm.datagrid('getRows').length;
@@ -290,53 +318,13 @@
         },
         //单价*数量=金额   行格绑定公式计算、参照事件
         girdProcessData: function (rowIndex) {
-
             this.girdEditor(rowIndex);
-            enterKeyTest();//input回车tab事件
+            enterKey();//input回车tab事件
 
             var that = this;
-            var productName = $tableIdForm.datagrid('getEditor', {
-                index: rowIndex,
-                field: 'productName'
-            });
-            //var price = $tableIdForm.datagrid('getEditor', {
-            //    index: rowIndex,
-            //    field: 'price'
-            //});
-            //var num = $tableIdForm.datagrid('getEditor', {
-            //    index: rowIndex,
-            //    field: 'num'
-            //});
-            //var amount = $tableIdForm.datagrid('getEditor', {
-            //    index: rowIndex,
-            //    field: 'amount'
-            //});
-            //var amountEvent = function () {
-            //    var _amount = Number($(num.target).val() * $(price.target).val());
-            //    $(amount.target).val(_amount);
-
-            //};
-            //var amountSumEvent = function () {
-            //    var rows = $tableIdForm.datagrid('getRows') && $tableIdForm.datagrid('getRows').length;
-            //    var _amountSum = 0, a = 0;
-            //    var amount = [];
-            //    for (var i = 0; i < rows; i++) {
-            //        amount[i] = $tableIdForm.datagrid('getEditor', {
-            //            index: i,
-            //            field: 'amount'
-            //        });
-            //        a = parseFloat($(amount[i].target).val())
-            //        if (!isNaN(a)) {
-            //            _amountSum = common.math.FloatAdd(_amountSum, a);
-            //        }                    
-            //    }
-            //    $amountSum.text(_amountSum);
-            //};
-
-            $(that.num.target).bind('blur', function () { mainForm.gridGS(rowIndex); mainForm.headProcessData() });
-            $(that.price.target).bind('blur', function () { mainForm.gridGS(rowIndex); mainForm.headProcessData() });//input propertychange
-
-            $(productName.target).bind('keydown', function (e) {
+            $(that.num[rowIndex].target).bind('blur', function () { that.gridGS(rowIndex); that.headProcessData() });
+            $(that.price[rowIndex].target).bind('blur', function () { that.gridGS(rowIndex); that.headProcessData() });//input propertychange
+            $(that.productName[rowIndex].target).bind('keydown', function (e) {
                 var param = this.value;
                 var key = e.which;
                 $(this).bind('change', function () {//！！！嵌套change事件 参照返回值回车不触发弹窗
@@ -350,65 +338,27 @@
 
                        },
 
-        girdProcessData0: function (rowIndex) {
-            enterKeyTest();//input回车tab事件
-            var productName = $tableIdForm.datagrid('getEditor', {
-                index: rowIndex,
-                field: 'productName'
-            });
-            var price = $tableIdForm.datagrid('getEditor', {
-                index: rowIndex,
-                field: 'price'
-            });
-            var num = $tableIdForm.datagrid('getEditor', {
-                index: rowIndex,
-                field: 'num'
-            });
-            var amount = $tableIdForm.datagrid('getEditor', {
-                index: rowIndex,
-                field: 'amount'
-            });
-            var amountEvent = function () {
-                var _amount = Number($(num.target).val() * $(price.target).val());
-                $(amount.target).val(_amount);
-
-            };
-            var amountSumEvent = function () {
-                var rows = $tableIdForm.datagrid('getRows') && $tableIdForm.datagrid('getRows').length;
-                var _amountSum = 0, a = 0;
-                var amount = [];
-                for (var i = 0; i < rows; i++) {
-                    amount[i] = $tableIdForm.datagrid('getEditor', {
-                        index: i,
-                        field: 'amount'
-                    });
-                    a = parseFloat($(amount[i].target).val())
-                    if (!isNaN(a)) {
-                        _amountSum = common.math.FloatAdd(_amountSum, a);
-                    }                    
-                }
-                $amountSum.text(_amountSum);
-            };
-
-            $(num.target).bind('blur', function () { amountEvent(rowIndex); mainForm.headProcessData() });
-            $(price.target).bind('blur', function () { amountEvent(rowIndex); mainForm.headProcessData() });//input propertychange
-
-            $(productName.target).bind('keydown', function (e) {
-                var param = this.value;
-                var key = e.which;
-                $(this).bind('change', function () {//！！！嵌套change事件 参照返回值回车不触发弹窗
-                    var self = this;
-                    if (key == 13) {
-                        e.preventDefault();
-                        mainForm.referGrid.formGrid(param, rowIndex, self)//绑定参照
-                    }
-                })
-            })
-
-        },
-
         formGridInit: function () {
             $formMain.form('clear');
+            var _startTime = new Date().format('yyyy-mm-dd')
+            $('#inTime').datebox({
+                width: 100,
+                editable: true,
+                value: _startTime,
+                required: false,
+                //onSelect: function (date) {
+                //    _startTime = Date.parse($(this).datebox('getValue')) - 86400000 / 3;
+                //}
+            });
+            $buzType.combobox({
+                width: 100,
+                textField: 'name',
+                valueField: 'id',
+                required: true
+            });
+            var data = [{ name: "制单", id: "0" }, { name: "审核", id: "1" }];
+            $buzType.combobox('loadData', data);
+
             var tableColumns = [];
             tableColumns.push({
                 field: 'id',
@@ -488,6 +438,8 @@
                 total: 0,
                 rows: []
             });
+            //声明单元格数组
+            this.girdEditorInit();
             //表体显示第一行        
             for (var i = 0; i < 1; i++) {
                 this.btnEvent.rowAdd();
@@ -504,9 +456,7 @@
                 $tableIdForm.datagrid('beginEdit', lastIndex);
                 mainForm.girdProcessData(lastIndex); //行金额计算公式事件  
                 callback && callback();//钩子 1动态加行后 回车进入新行首格 2参照返回值后进行赋值！！！
-                //enterKeyTest();//input回车tab事件
-                
-             
+                //enterKeyTest();//input回车tab事件  迁入 girdProcessData  方法中执行                       
             },
             rowDel: function () {                
                 console.log(selectRowIndexBs);
@@ -551,26 +501,10 @@
                                     $appendedRows[i].price = 100;
 
                                     if (i == 0) {
-                                        var productName = $tableIdForm.datagrid('getEditor', {
-                                            index: currentIndex,
-                                            field: 'productName'
-                                        });
-                                        var price = $tableIdForm.datagrid('getEditor', {
-                                            index: currentIndex,
-                                            field: 'price'
-                                        });
-                                        var num = $tableIdForm.datagrid('getEditor', {
-                                            index: currentIndex,
-                                            field: 'num'
-                                        });
-                                        //$(productName.target).val($appendedRows[i].UserName);
-                                        //$(price.target).val($appendedRows[i].Age);
-                                        //$(num.target).val(1);
                                         //返回值后 触发公式
-                                        //mainForm.girdEditor(currentIndex)
-                                        $(mainForm.productName.target).val($appendedRows[i].UserName);
-                                        $(mainForm.price.target).val($appendedRows[i].Age);
-                                        $(mainForm.num.target).val(1);
+                                        $(mainForm.productName[currentIndex].target).val($appendedRows[i].UserName);
+                                        $(mainForm.price[currentIndex].target).val($appendedRows[i].Age);
+                                        $(mainForm.num[currentIndex].target).val(1);
                                         mainForm.gridGS(currentIndex);
                                         mainForm.headProcessData();
                                     }
@@ -578,23 +512,11 @@
                                         var rowindex = lastRowIndex + 1;//回调函数载入时读取，此时还未增行故行号要加1
                                         //增加行后回调
                                         mainForm.btnEvent.rowAdd(function () {
-                                            var productName = $tableIdForm.datagrid('getEditor', {
-                                                index: rowindex,
-                                                field: 'productName'
-                                            });
-                                            var price = $tableIdForm.datagrid('getEditor', {
-                                                index: rowindex,
-                                                field: 'price'
-                                            });
-                                            var num = $tableIdForm.datagrid('getEditor', {
-                                                index: rowindex,
-                                                field: 'num'
-                                            });
-                                            $(mainForm.productName.target).val($appendedRows[i].UserName);
-                                            $(mainForm.price.target).val($appendedRows[i].Age);
-                                            $(mainForm.num.target).val(1);
-                                           // mainForm.girdProcessData0(rowindex);
-                                            //mainForm.girdEditor(rowindex)
+                                            console.log('mainForm.productName.target', $(mainForm.productName.target))
+                                            $(mainForm.productName[rowindex].target).val($appendedRows[i].UserName);
+                                            $(mainForm.price[rowindex].target).val($appendedRows[i].Age);
+                                            $(mainForm.num[rowindex].target).val(1);
+
                                             mainForm.gridGS(rowindex);
                                             mainForm.headProcessData();
 
@@ -604,8 +526,10 @@
                                 }
                             }
                             $referDialog.dialog('close');
-                            $(selector).focus();
-                            $(selector).select();
+                            //$(selector).focus();
+                            //$(selector).select();
+                            $(mainForm.productName[lastRowIndex].target).focus();
+                            $(mainForm.productName[lastRowIndex].target).select();
                            
                         }                        
                     }]
@@ -635,7 +559,7 @@
 
 
 
-
+/*
 function getSelectRow(selector) {//网上查 点击取得行索引，有问题
     var rowIndex = $(selector).parents('.datagrid-row').attr('datagrid-row-index');
     console.log('FKFK', rowIndex)
@@ -646,3 +570,80 @@ function getRowIndex(target) {
     return paseInt(tr.attr("datagrid-row-index"));
 
 }
+
+gridGS0: function (rowIndex) {
+    var price = $tableIdForm.datagrid('getEditor', {
+        index: rowIndex,
+        field: 'price'
+    });
+    var num = $tableIdForm.datagrid('getEditor', {
+        index: rowIndex,
+        field: 'num'
+    });
+    var amount = $tableIdForm.datagrid('getEditor', {
+        index: rowIndex,
+        field: 'amount'
+    });
+    (function () {
+        var _amount = Number($(num.target).val() * $(price.target).val());
+        $(amount.target).val(_amount);
+    })();
+
+}，
+girdProcessData0: function (rowIndex) {
+    enterKey();//input回车tab事件
+    var productName = $tableIdForm.datagrid('getEditor', {
+        index: rowIndex,
+        field: 'productName'
+    });
+    var price = $tableIdForm.datagrid('getEditor', {
+        index: rowIndex,
+        field: 'price'
+    });
+    var num = $tableIdForm.datagrid('getEditor', {
+        index: rowIndex,
+        field: 'num'
+    });
+    var amount = $tableIdForm.datagrid('getEditor', {
+        index: rowIndex,
+        field: 'amount'
+    });
+    var amountEvent = function () {
+        var _amount = Number($(num.target).val() * $(price.target).val());
+        $(amount.target).val(_amount);
+
+    };
+    var amountSumEvent = function () {
+        var rows = $tableIdForm.datagrid('getRows') && $tableIdForm.datagrid('getRows').length;
+        var _amountSum = 0, a = 0;
+        var amount = [];
+        for (var i = 0; i < rows; i++) {
+            amount[i] = $tableIdForm.datagrid('getEditor', {
+                index: i,
+                field: 'amount'
+            });
+            a = parseFloat($(amount[i].target).val())
+            if (!isNaN(a)) {
+                _amountSum = common.math.FloatAdd(_amountSum, a);
+            }                    
+        }
+        $amountSum.text(_amountSum);
+    };
+
+    $(num.target).bind('blur', function () { amountEvent(rowIndex); mainForm.headProcessData() });
+    $(price.target).bind('blur', function () { amountEvent(rowIndex); mainForm.headProcessData() });//input propertychange
+
+    $(productName.target).bind('keydown', function (e) {
+        var param = this.value;
+        var key = e.which;
+        $(this).bind('change', function () {//！！！嵌套change事件 参照返回值回车不触发弹窗
+            var self = this;
+            if (key == 13) {
+                e.preventDefault();
+                mainForm.referGrid.formGrid(param, rowIndex, self)//绑定参照
+            }
+        })
+    })
+
+},
+*/

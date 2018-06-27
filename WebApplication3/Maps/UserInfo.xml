@@ -5,11 +5,12 @@
 
 
   <alias>
-    <!-- alias:取别名
-                    assembly:表示类所在的文件  
-                    type:表示该类的完整的名称
+    <!-- alias:取别名 assembly:表示类所在的文件  type:表示该类的完整的名称
+    ****** Card2 是为了不与 Card.xml里的Card类冲突
       -->
     <typeAlias alias="UserInfo" assembly="WebAPI3.Model" type="WebAPI3.Model.UserInfo" />
+    <!--****** 一对多 -->
+    <typeAlias alias="Card2" assembly="WebAPI3.Model" type="WebAPI3.Model.Card" />
     
   </alias>
   <parameterMaps>
@@ -17,8 +18,6 @@
         <parameter property="userid" column="userid"  direction="Input" type="int" dbType="Int32" />
     </parameterMap>  
   </parameterMaps>
-
-
 
   <statements>
     <select id="select_UserInfoAll_Hash" resultClass="HashTable">
@@ -31,13 +30,10 @@
     </select>
     <insert id="insert_UserInfoOne" parameterClass="UserInfo">
       INSERT INTO UserInfo(
-      [UserName],[Age]
+      [UserName],[Age],[Id]
       )VALUES(
-      #UserName#,#Age#
+      #UserName#,#Age#,#Id#
       )
-      <selectKey  type="post" resultClass="int" property="Id">
-        SELECT CAST(@@IDENTITY as int) as Id
-      </selectKey>
     </insert>
     <delete id="del_UserInfoOne" parameterClass="UserInfo">
       <![CDATA[ 
@@ -55,6 +51,18 @@
           [Id] = #Id#
         </isParameterPresent>
       </dynamic>
+    </select>
+    <select id="select_UserInfoOne2" resultMap="UserInfo-result">
+      select Id,UserName,Age,isnull(Password,'')as Password,SessionKey from UserInfo
+      <dynamic prepend="where">
+        <isParameterPresent property="id" prepend="WHERE">
+          [Id] = #Id#
+        </isParameterPresent>
+      </dynamic>
+    </select>
+    <!--****** 一对多 -->   
+    <select id="getCardList2" parameterClass="int" resultMap="cardResultMap2">
+      select id,cardname,userid from card where userid = #Id#
     </select>
 
     <select id="select_UserInfoBySessionkey" resultMap="UserInfo-result">
@@ -94,7 +102,6 @@
 
   <parameterMaps>
     <parameterMap id="SP_getDjlsh_param" class="Hashtable">
-
       <parameter property="DjName" column="DjName" />
       <parameter property="DjLsh" column="DjLsh" direction="Output" />
     </parameterMap>
@@ -108,6 +115,14 @@
       <result property="Age" column="Age" />
       <result property="SessionKey" column="SessionKey" />
       <result property="Password" column="password" />
+      <!--****** 一对多 -->
+      <result property="Cards" column="id" select="UserInfo.getCardList2"/>
+    </resultMap>
+
+    <resultMap id="cardResultMap2" class="Card2">
+      <result property="Id" column="id" />
+      <result property="CardName" column="cardname" />
+      <result property="User.Id" column="userid" />
     </resultMap>
 
   </resultMaps>
