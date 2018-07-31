@@ -19,19 +19,18 @@ namespace WebAPI3.Controllers
     public class UserInfoController : ApiController
     {
         UserInfoService uss = new UserInfoService();
-        [SessionValidate]
+        //[SessionValidate]
         [HttpPost, Route("api/userinfo/GetUsers")]
         public IList<Hashtable> GetUsers([FromBody]PageCriteria pc)
         {
             PageCriteria con = new PageCriteria ();
-            //int Id = 43;
             con.userid =pc.userid;
             IList<Hashtable> users = uss.GetUserInfoListHashBySP(con);
-            object a = new { UserName = "x", sex = "1", Age = 12 };
-            object b = new { UserName = "y", sex = "0", Age = 22 };
-            IList<object> uo = new List<object>();
-            uo.Add(a);
-            uo.Add(b);
+            //object a = new { UserName = "x", sex = "1", Age = 12 };
+            //object b = new { UserName = "y", sex = "0", Age = 22 };
+            //IList<object> uo = new List<object>();
+            //uo.Add(a);
+            //uo.Add(b);
 
             return users;
         }
@@ -44,38 +43,45 @@ namespace WebAPI3.Controllers
             return users;
         }
 
-        //public IDictionary<string, IList<UserInfo>> GetUsersDic()
-        //{
-        //    IDictionary<string, IList<UserInfo>> Di = new Dictionary<string, IList<UserInfo>>();
-        //    string k = "KEY";
-        //    IList<UserInfo> users = GetUsers0();
-        //    Di.Add(k, users);
-        //    return Di;
-        //}
 
-        public int PostUser(UserInfo user)
+        [HttpPost, Route("api/userinfo/PostUser")]
+        public int PostUser([FromBody]dynamic user)
         {
-
-            int a = uss.UserInfoInsertOne(user);
+            UserInfo u = new UserInfo();
+            List<Card>cs=new List<Card>();
+            u.UserName = user.UserName;
+            foreach (var o in user.Cards) {
+                Card c = new Card();
+                c.CardName = o.CardName;
+                c.CardPrice = o.CardPrice;
+                //c.User = u;
+                cs.Add(c);
+            };
+            u.Age = user.Age;
+            u.Cards=cs;
+            int a = uss.UserInfoEdit(u);
             return a;
-
-
         }
 
-        // [Route("api/{controller}/name={name}")]
-        //public int PostUser1(UserInfo user)
-        //{
-        //    IList<UserInfoItem> li = new List<UserInfoItem>();
-        //    li = user.Items;
-        //    int id = uss.UserInfoInsertOne(user);
-        //    foreach(UserInfoItem a1 in li)
-        //    {
-        //        //System.Console.Write(a1.Address + " " + a1.Id.ToString());
-        //        a1.Id = id;
-        //        uss.UserInfoItemInsertOne(a1);
-        //    }
-        //    return id;
-        //}
+        [HttpPost, Route("api/userinfo/userInfoEdit")]
+        public ResponseDTO userInfoEdit(dynamic user)
+        {
+            UserInfo u=Newtonsoft.Json.JsonConvert.DeserializeObject<UserInfo>(Convert.ToString(user));
+            foreach (var o in u.Cards)
+            {
+                o.User = u;
+            };
+            int id = uss.UserInfoEdit(u);
+            //重读
+            UserInfo u2 =uss.GetUserInfo2(id);
+            
+            return new ResponseDTO(true,"OK",u2);
+        }
+
+        public ResponseDTO userInfoAudit(int Id)
+        {
+            return new ResponseDTO(true, "OK", uss.userInfoAudit(Id));
+        }
 
         [HttpGet]
         public ResponseDTO Login(int username, string password)//post  需要用对象表述？？
@@ -164,15 +170,39 @@ namespace WebAPI3.Controllers
             //ht["DjLsh"] = 0;
             //uss.GetDjlsh(ht);//调用sp产生 djlsh            
             //user1.Id = (int)ht["DjLsh"];
-            uss.UserInfoInsertOne(user1);//使用ibaits插入主从表；
+            uss.UserInfoEdit(user1);//使用ibaits插入主从表；
 
         }
          [HttpGet, Route("api/userinfo/GetUsers2")]
-         public UserInfo GetUsers2(int id)
+         public ResponseDTO GetUsers2([FromBody]int id)
          {
-             id = 109;
              UserInfo user = uss.GetUserInfo2(id);//使用ibaits一对多方式查询对象；具体查看userinfo.xml一对多的配置
-             return user;
+             return new ResponseDTO(true, "OK", user);
          }
+
+
+        //public IDictionary<string, IList<UserInfo>> GetUsersDic()
+        //{
+        //    IDictionary<string, IList<UserInfo>> Di = new Dictionary<string, IList<UserInfo>>();
+        //    string k = "KEY";
+        //    IList<UserInfo> users = GetUsers0();
+        //    Di.Add(k, users);
+        //    return Di;
+        //}
+
+        // [Route("api/{controller}/name={name}")]
+        //public int PostUser1(UserInfo user)
+        //{
+        //    IList<UserInfoItem> li = new List<UserInfoItem>();
+        //    li = user.Items;
+        //    int id = uss.UserInfoInsertOne(user);
+        //    foreach(UserInfoItem a1 in li)
+        //    {
+        //        //System.Console.Write(a1.Address + " " + a1.Id.ToString());
+        //        a1.Id = id;
+        //        uss.UserInfoItemInsertOne(a1);
+        //    }
+        //    return id;
+        //}
     }
 }

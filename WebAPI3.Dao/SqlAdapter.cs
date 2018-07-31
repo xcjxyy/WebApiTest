@@ -130,6 +130,25 @@ namespace WebAPI3.Dao
             ExecuteBatch(theIBatisNetBatchStatements);
         }
 
+        public static IList<T> ExecuteQueryForList<T>(string statementName, object parameterObject) 
+        {
+
+            ISqlMapper sqlMap = Mapper.GetMaper;  
+            //DateTime dt_begin = DateTime.Now;
+            try
+            {
+
+                IList<T> record = sqlMap.QueryForList<T>(statementName, parameterObject);//**** 调用ISqlMapper.QueryForList
+                //logsql(dt_begin, statementName, parameterObject, 0, "SELECT", "");
+                return record;
+            }
+            catch (Exception exception)
+            {
+                /// logsql(dt_begin, statementName, parameterObject, 1, "SELECT", exception);
+                throw;
+            }
+        }
+
     }
 }
     

@@ -13,11 +13,7 @@
     <typeAlias alias="Card2" assembly="WebAPI3.Model" type="WebAPI3.Model.Card" />
     
   </alias>
-  <parameterMaps>
-    <parameterMap id="sp_select_user_param" class="WebAPI3.Model.PageCriteria">
-        <parameter property="userid" column="userid"  direction="Input" type="int" dbType="Int32" />
-    </parameterMap>  
-  </parameterMaps>
+
 
   <statements>
     <select id="select_UserInfoAll_Hash" resultClass="HashTable">
@@ -53,7 +49,8 @@
       </dynamic>
     </select>
     <select id="select_UserInfoOne2" resultMap="UserInfo-result">
-      select Id,UserName,Age,isnull(Password,'')as Password,SessionKey from UserInfo
+      select Id,UserName,Age,isnull(Password,'')as Password,SessionKey,Auditer,isnull(AuditTime,getdate())as AuditTime,isnull(Status,'')as Status
+      from UserInfo
       <dynamic prepend="where">
         <isParameterPresent property="id" prepend="WHERE">
           [Id] = #Id#
@@ -80,13 +77,17 @@
         SET
           UserName = #UserName#,
           Age = #Age#,
-          SessionKey = #SessionKey#
+          Auditer=#Auditer#,
+          AuditTime=#AuditTime#,
+          Status=#Status#
       ]]>
       <dynamic prepend="WHERE">
         Id = #Id#
       </dynamic>
     </update>
-
+    <delete id="deleteCardBysUserid" parameterClass="int">
+      delete from card where userid = #Id#
+    </delete>
     <procedure id="sp_select_user"  parameterMap="sp_select_user_param" resultClass="Hashtable" >
       [dbo].[sp_select_user]
     </procedure>
@@ -97,13 +98,22 @@
     <procedure id="SP_getDjlsh" parameterMap="SP_getDjlsh_param">
       SP_getDjlsh
     </procedure>
+    <procedure id="auditSP" parameterMap="auditSP_param">
+      SP_userinfoAudit
+    </procedure>
 
   </statements>
 
   <parameterMaps>
+    <parameterMap id="sp_select_user_param" class="WebAPI3.Model.PageCriteria">
+      <parameter property="userid" column="userid"  direction="Input" type="int" dbType="Int32" />
+    </parameterMap>
     <parameterMap id="SP_getDjlsh_param" class="Hashtable">
       <parameter property="DjName" column="DjName" />
       <parameter property="DjLsh" column="DjLsh" direction="Output" />
+    </parameterMap>
+    <parameterMap id="auditSP_param" class="Hashtable">
+      <parameter property="id" column="id" />
     </parameterMap>
   </parameterMaps>
 
@@ -115,8 +125,14 @@
       <result property="Age" column="Age" />
       <result property="SessionKey" column="SessionKey" />
       <result property="Password" column="password" />
+       <result property="Auditer" column="Auditer" />
+       <result property="AuditTime" column="AuditTime" />
+       <result property="Status" column="Status" />
       <!--****** 一对多 -->
-      <result property="Cards" column="id" select="UserInfo.getCardList2"/>
+      <!--****** 访问Card空间里的select查询 -->
+      <result property="Cards" column="id" select="Card.getCardList3"/>
+      <!--****** 访问本空间里的select 比上面冗余 -->
+      <!--result property="Cards" column="id" select="UserInfo.getCardList2"/-->
     </resultMap>
 
     <resultMap id="cardResultMap2" class="Card2">

@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="../Scripts/themes/bootstrap/easyui.css">
+    <link rel="stylesheet" href="../Scripts/themes/icon.css">
+    <link rel="stylesheet" href="../Scripts/themes/common.css">
+    <style>
+        .HH9{
+            float:left
+        }
+    </style>
+  
+        <title>UserInfor</title>
+</head>
+<body>
+    <div id="gridMain"></div>
+    <div id="tB">
+        <div class="HH">
+            <a href="#" id="add" class="easyui-linkbutton" iconCls="icon-add" plain="true" >ADD</a>
+            <a href="#" id="edit"class="easyui-linkbutton" iconcls="icon-edit" plain="true">EDIT</a>
+            <a href="#" class="easyui-linkbutton" iconcls="icon-remove" plain="true">DEL</a>
+            <a href="#" id="save" class="easyui-linkbutton" iconcls="icon-save" plain="true">SAVE</a>
+            <a href="#" id="redo" class="easyui-linkbutton" iconcls="icon-redo" plain="true">REDO</a>
+        </div>
+        <div class="HH">
+            查询条件<input type="text" />
+            日期<input type="text" class="textbox" id="dateCondition" />
+            单据状态<input type="text" class="textbox" id="selectStatus" />
+            <a href="#" class="easyui-linkbutton" iconcls="icon-search" plain="true">查询</a>
+        </div>
+    </div>
+    <div id="dialogMain" class="public-dialog" style="display: none;">
+        <form id="formMain" class="form-horizontal dialog-form" enctype="application/json">
+            <input type="hidden" id="formMain-id" name="id" />
+            <fieldset class="areagroup1">
+                <div class="form-group">
+                    <label for="Id" class="control-label">用户ID：</label>
+                    <input type="text" readonly="true" name="Id" id="Id" />
+                    <em id="no">-</em>
+                </div>
+                <div class="form-group clear">
+                    <label for="UserName" class="control-label">用户姓名：</label>
+                    <input type="text" name="UserName" placeholder="UserName" id="UserName" class="textbox" />
+                </div>
+                <div class="form-group">
+                    <label for="Age" class="control-label">年龄：</label>
+                    <input type="text" name="Age" id="Age" class="textbox" />
+                </div>
+                <div class="form-group">
+                    <label for="BirthDate" class="control-label"><em class="required">*</em>生日：</label>
+                    <input type="text" name="BirthDate" class="textbox" id="BirthDate" />
+                </div>
+                <div class="form-group">
+                    <label for="amountSum" class="control-label">总金额：</label>
+                    <em id="amountSum" class="textbox">-</em>
+                </div>
+                <div class="form-group" style="width:482px;">
+                    <label for="remark" class="control-label">备注：</label>
+                    <textarea class="textbox medium" id="remark" name="remark" rows="5" cols="63"></textarea>
+                </div>
+            </fieldset>
+            <fieldset class="areagroup2">
+                <div class="form-group">
+                    <label for="createTime" class="control-label">制单时间：</label>
+                    <em class="width130" id="createTime">-</em>
+                </div>
+                <div class="form-group">
+                    <label for="staffName" class="control-label">制单人：</label>
+                    <em class="width130" id="staffName">-</em>
+                </div>
+                <div class="form-group">
+                    <label for="auditDate" class="control-label">审核时间：</label>
+                    <em class="width130" id="auditDate">-</em>
+                </div>
+                <div class="form-group">
+                    <label for="auditorName" class="control-label">审核人：</label>
+                    <em class="width130" id="auditorName">-</em>
+                </div>
+
+            </fieldset>
+
+        </form>
+        <div id="gridDetail" style="display: none;">
+        </div>
+    </div>
+        <div id="dialogRefer" style="display: none;">
+            <div id="gridRefer" style="height: 380px; ">
+            </div>
+        </div>
+
+
+        <script type="text/javascript" src="../Scripts/sea.js"></script>
+        <script type="text/javascript" src="../Scripts/seajs.config.js"></script>
+        <script type="text/javascript">
+            seajs.use('../Scripts/easyUItest/UserInfo.js');
+        </script>
+
+
+</body>
+</html>

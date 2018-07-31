@@ -12,10 +12,73 @@ namespace WebAPI3.Service
 {
     public class UserInfoService
     {
-        public int UserInfoInsertOne(UserInfo userInfo)
+        public int UserInfoEdit(UserInfo userInfo)
         {
             //Object obj = Mapper.GetMaper.Insert("UserInfo.insert_UserInfoOne", userInfo); //****转SqlAdapter调用，不直接调用Mapper
+            IList<iBatisStatement> il = new List<iBatisStatement>();
+            Hashtable ht = new Hashtable();
+            ht["DjName"] = "userinfo";
+            ht["DjLsh"] = 0;
+            if (userInfo.Id == 0)
+            {
+                this.GetDjlsh(ht);
+                userInfo.Id = (int)ht["DjLsh"];
+                il.Add(new iBatisStatement { StatementName = "UserInfo.insert_UserInfoOne", ParameterObject = userInfo, Type = SqlExecuteType.INSERT });
+            }
+            else
+            {
+                ht["DjLsh"] = userInfo.Id;
+                il.Add(new iBatisStatement { StatementName = "UserInfo.update_UserInfoOne", ParameterObject = userInfo, Type = SqlExecuteType.UPDATE });
+                il.Add(new iBatisStatement { StatementName = "Card.deleteCardBysUserid", ParameterObject = userInfo, Type = SqlExecuteType.DELETE });
+            }
 
+            for (int i = 0; i < userInfo.Cards.Count; i++)
+            {
+                il.Add(new iBatisStatement { StatementName = "Card.insert_CardOne", ParameterObject = userInfo.Cards[i], Type = SqlExecuteType.INSERT });
+            };
+
+            try
+            {
+                SqlAdapter.ExecuteBatch(il);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return (int)ht["DjLsh"];
+        }
+        public UserInfo userInfoAudit(int Id)
+        {
+            UserInfo u = GetUserInfo2(Id);
+            if (!(u.Status == ""))
+            {
+                throw new ApiException("已审核，不能再审！", "不能审核！");
+            }
+            u=userInfoAudit(u);
+            //int u2= UpdateUserInfo(u);//返回的int是什么值？执行成功1失败0
+            return u;
+        }
+        private UserInfo userInfoAudit(UserInfo u)
+        {
+            u.Auidt();
+            int id = u.Id;
+            Hashtable ht = new Hashtable();
+            ht["id"] = u.Id;
+            IList<iBatisStatement> il = new List<iBatisStatement>();
+            il.Add(new iBatisStatement { StatementName = "UserInfo.update_UserInfoOne", ParameterObject = u, Type = SqlExecuteType.UPDATE });
+            il.Add(new iBatisStatement { StatementName = "UserInfo.auditSP", ParameterObject = ht,Type=SqlExecuteType.INSERT });
+            try
+            {
+                SqlAdapter.ExecuteBatch(il);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return u;
+        }
+        public int PostUser(UserInfo userInfo)
+        {
             Hashtable ht = new Hashtable();
             ht["DjName"] = "userinfo";
             ht["DjLsh"] = 0;
@@ -66,8 +129,9 @@ namespace WebAPI3.Service
 
         public IList<Hashtable> GetUserInfoListHash()
         {
+            return SqlAdapter.ExecuteQueryForList<Hashtable>("UserInfo.select_UserInfoAll_Hash", null);
 
-            return Mapper.GetMaper.QueryForList<Hashtable>("UserInfo.select_UserInfoAll_Hash", null);
+            //return Mapper.GetMaper.QueryForList<Hashtable>("UserInfo.select_UserInfoAll_Hash", null);
         }
 
         public IList<Hashtable> GetUserInfoListHashBySP(PageCriteria con)
@@ -104,52 +168,6 @@ namespace WebAPI3.Service
             Mapper.GetMaper.Insert("UserInfo.SP_getDjlsh", ht);
         }
 
-    //    public int ExecuteBatch(IEnumerable<iBatisStatement> batchStatements)
-    //    {
-    //        //ISqlMapper sqlMap = Mapper.GetMaper;
-    //        int i = 0;
-    //        int ok = 1;
-    //        try
-    //        {
-    //            Mapper.GetMaper.BeginTransaction();
-    //        }
-    //        catch
-    //        {
-    //            ok = 0;
-    //        }
-
-    //        try
-    //        {
-    //            foreach (iBatisStatement statement in batchStatements)
-    //            {
-    //                if (statement.Type == SqlExecuteType.INSERT)
-    //                {
-    //                    Mapper.GetMaper.Insert(statement.StatementName, statement.ParameterObject);
-    //                }
-    //                else if (statement.Type == SqlExecuteType.UPDATE)
-    //                {
-    //                    Mapper.GetMaper.Update(statement.StatementName, statement.ParameterObject);
-    //                }
-    //                else
-    //                {
-    //                    Mapper.GetMaper.Delete(statement.StatementName, statement.ParameterObject);
-
-    //                }
-    //                i++;
-    //            }
-
-    //            if (ok == 1)
-    //            {
-    //                Mapper.GetMaper.CommitTransaction();
-    //            }
-    //        }
-    //        catch (Exception ex)
-    //        {
-    //            Mapper.GetMaper.RollBackTransaction();
-    //            throw ex;
-    //        }
-    //        return ok;
-    //    }
 
 
         public UserInfo GetUserInfo2(int id)

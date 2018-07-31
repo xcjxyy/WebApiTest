@@ -16,17 +16,25 @@
 
     <insert id="insert_CardOne" parameterClass="Card">
       INSERT INTO Card(
-      [cardName],[userid]
+      [cardName],[userid],[cardprice]
       )VALUES(
-      #CardName#,#User.Id#
+      #CardName#,#User.Id#,#CardPrice#
       )
       <selectKey  type="post" resultClass="int" property="Id">
         SELECT CAST(@@IDENTITY as int) as Id
       </selectKey>
     </insert>
+    
+    <delete id="deleteCardBysUserid" parameterClass="UserInfo">
+      delete from card where userid = #Id#
+    </delete>
+
+    <select id="getCardList3" parameterClass="int" resultMap="Card-result">
+      select id,cardname,cardprice,userid as userid from card where userid = #Id#
+    </select>
 
   </statements>
-
+ 
 
 
   <resultMaps >
@@ -34,6 +42,7 @@
     <resultMap id="Card-result" class="Card">
       <result property="Id" column="Id" />
       <result property="CardName" column="CardName" />
+      <result property="CardPrice" column="CardPrice" />
       <result property="User.Id" column="UserId" />
     </resultMap>
 
