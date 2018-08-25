@@ -72,17 +72,15 @@
     </select>
 
     <update id="update_UserInfoOne" parameterClass="UserInfo">
-      <![CDATA[ 
         UPDATE UserInfo
-        SET
-          UserName = #UserName#,
-          Age = #Age#,
-          Auditer=#Auditer#,
-          AuditTime=#AuditTime#,
-          Status=#Status#
-      ]]>
-      <dynamic prepend="WHERE">
-        Id = #Id#
+        SET         
+       <dynamic prepend=" ">
+        <isPropertyAvailable prepend=" , " property="UserName" >UserName = #UserName#</isPropertyAvailable>
+        <isPropertyAvailable prepend=" , " property="Age" >Age = #Age#</isPropertyAvailable>
+         <isPropertyAvailable prepend=" , " property="Auditer" >Auditer=#Auditer#</isPropertyAvailable>
+         <isPropertyAvailable prepend=" , " property="AuditTime" >AuditTime=#AuditTime#</isPropertyAvailable>
+         <isPropertyAvailable prepend=" , " property="Status" >Status=#Status#</isPropertyAvailable>
+        where Id = #Id#
       </dynamic>
     </update>
     <delete id="deleteCardBysUserid" parameterClass="int">

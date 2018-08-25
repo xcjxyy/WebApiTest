@@ -12,7 +12,7 @@ namespace WebAPI3.Service
 {
     public class UserInfoService
     {
-        public int UserInfoEdit(UserInfo userInfo)
+        public UserInfo UserInfoEdit(UserInfo userInfo)
         {
             //Object obj = Mapper.GetMaper.Insert("UserInfo.insert_UserInfoOne", userInfo); //****转SqlAdapter调用，不直接调用Mapper
             IList<iBatisStatement> il = new List<iBatisStatement>();
@@ -39,13 +39,17 @@ namespace WebAPI3.Service
 
             try
             {
-                SqlAdapter.ExecuteBatch(il);
+                BuilderFactory.Default().ExecuteBatch(il);
+                //SqlAdapter.ExecuteBatch(il);
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-            return (int)ht["DjLsh"];
+            //return (int)ht["DjLsh"]
+            int id = (int)ht["DjLsh"];
+            return this.GetUserInfo2(id);
+
         }
         public UserInfo userInfoAudit(int Id)
         {
@@ -69,7 +73,8 @@ namespace WebAPI3.Service
             il.Add(new iBatisStatement { StatementName = "UserInfo.auditSP", ParameterObject = ht,Type=SqlExecuteType.INSERT });
             try
             {
-                SqlAdapter.ExecuteBatch(il);
+                BuilderFactory.Default().ExecuteBatch(il);
+                //SqlAdapter.ExecuteBatch(il);
             }
             catch (Exception ex)
             {
@@ -94,7 +99,8 @@ namespace WebAPI3.Service
 
             try
             {
-                SqlAdapter.ExecuteBatch(il);
+                BuilderFactory.Default().ExecuteBatch(il);
+                //SqlAdapter.ExecuteBatch(il);
             }
             catch (Exception ex)
             {
@@ -106,7 +112,8 @@ namespace WebAPI3.Service
         {
             IList<iBatisStatement> il = new List<iBatisStatement>();
             il.Add(new iBatisStatement { StatementName = "UserInfoItem.insert_UserInfoItem", ParameterObject = userInfoItem, Type = SqlExecuteType.INSERT });
-            SqlAdapter.ExecuteBatch(il);
+            BuilderFactory.Default().ExecuteBatch(il);
+            //SqlAdapter.ExecuteBatch(il);
         }
 
         public UserInfo GetUserInfo(int id,string pwd)
@@ -129,8 +136,8 @@ namespace WebAPI3.Service
 
         public IList<Hashtable> GetUserInfoListHash()
         {
-            return SqlAdapter.ExecuteQueryForList<Hashtable>("UserInfo.select_UserInfoAll_Hash", null);
-
+            //return SqlAdapter.ExecuteQueryForList<Hashtable>("UserInfo.select_UserInfoAll_Hash", null);
+            return BuilderFactory.Default().ExecuteQueryForList<Hashtable>("UserInfo.select_UserInfoAll_Hash", null);
             //return Mapper.GetMaper.QueryForList<Hashtable>("UserInfo.select_UserInfoAll_Hash", null);
         }
 

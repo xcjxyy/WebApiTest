@@ -398,21 +398,41 @@
                 field: 'CardPrice',
                 title: '单价',
                 width: 120,
-                editor: 'text'
+                editor: {
+                    type: 'numberbox',
+                    options: {
+                        min: 0,
+                        max: 999999,
+                        precision: 6
+                    }}
              , align: 'right'
             });
             tableColumns.push({
                 field: 'num',
                 title: '数量',
                 width: 120,
-                editor: 'text'
+                editor: {
+                    type: 'numberbox',
+                    options: {
+                        min: 0,
+                        max: 999999,
+                        precision: 2
+                    }
+                }
              , align: 'right'
             });
             tableColumns.push({
                 field: 'amount',
                 title: '金额',
                 width: 120,
-                editor: 'text'
+                editor: {
+                    type: 'numberbox',
+                    options: {
+                        min: 0,
+                        max: 999999,
+                        precision: 2
+                    }
+                }
               , align: 'right'
             });
 
@@ -486,6 +506,7 @@
                     UserName: $UserName.val(),
                     Age: $Age.val(),
                     Id: $('#Id').val()
+                   // AuditTime:''
                 };
                 console.log('<<<',UserInfo.Id);
                 if (UserInfo.Id == null || UserInfo.Id=="") {

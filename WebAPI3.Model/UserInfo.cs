@@ -18,7 +18,7 @@ namespace WebAPI3.Model
         //public DateTime ExpiredTime { get; set; }
         //public DateTime CreateTime { get; set; }
         public string Status { get; set; }
-        public DateTime AuditTime { get; set; }
+        public DateTime? AuditTime { get; set; }
         public string Auditer { get; set; }
         public void Auidt()
         {

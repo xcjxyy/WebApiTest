@@ -51,6 +51,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuilderFactory.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="iBatisStatement.cs" />
     <Compile Include="SqlAdapter.cs" />
     <Compile Include="Mapper.cs" />

@@ -11,7 +11,7 @@ namespace WebAPI3.Dao
 {
     public class SqlAdapter
     {
-        public static object ExecuteInsert(string statementName, object parameterObject)
+        public  object ExecuteInsert(string statementName, object parameterObject)
         {
             ISqlMapper sqlMap = Mapper.GetMaper;
             //DateTime dt_begin = DateTime.Now;
@@ -28,7 +28,7 @@ namespace WebAPI3.Dao
             }
         }
 
-        public static int ExecuteUpdate(string statementName, object parameterObject)
+        public  int ExecuteUpdate(string statementName, object parameterObject)
         {
             ISqlMapper sqlMap = Mapper.GetMaper;
             try
@@ -42,7 +42,7 @@ namespace WebAPI3.Dao
             }
         }
 
-        public static int ExecuteDel(string statementName, object parameterObject)
+        public  int ExecuteDel(string statementName, object parameterObject)
         {
             ISqlMapper sqlMap = Mapper.GetMaper;
             try
@@ -56,7 +56,7 @@ namespace WebAPI3.Dao
             }
         }
 
-        public static void ExecuteBatch(IEnumerable<iBatisStatement> batchStatements)
+        public  void ExecuteBatch(IEnumerable<iBatisStatement> batchStatements)
         {
             //DateTime dt_begin = DateTime.Now;
             ISqlMapper sqlMap = Mapper.GetMaper;
@@ -130,7 +130,7 @@ namespace WebAPI3.Dao
             ExecuteBatch(theIBatisNetBatchStatements);
         }
 
-        public static IList<T> ExecuteQueryForList<T>(string statementName, object parameterObject) 
+        public  IList<T> ExecuteQueryForList<T>(string statementName, object parameterObject) 
         {
 
             ISqlMapper sqlMap = Mapper.GetMaper;  

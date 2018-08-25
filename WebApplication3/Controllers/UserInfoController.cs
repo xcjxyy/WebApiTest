@@ -59,8 +59,9 @@ namespace WebAPI3.Controllers
             };
             u.Age = user.Age;
             u.Cards=cs;
-            int a = uss.UserInfoEdit(u);
-            return a;
+            //int a = uss.UserInfoEdit(u);
+            //return a;
+            return 1;
         }
 
         [HttpPost, Route("api/userinfo/userInfoEdit")]
@@ -71,11 +72,11 @@ namespace WebAPI3.Controllers
             {
                 o.User = u;
             };
-            int id = uss.UserInfoEdit(u);
+            //int id = uss.UserInfoEdit(u);
             //重读
-            UserInfo u2 =uss.GetUserInfo2(id);
-            
-            return new ResponseDTO(true,"OK",u2);
+            //UserInfo u2 =uss.GetUserInfo2(id);
+
+            return new ResponseDTO(true, "OK", uss.UserInfoEdit(u));
         }
 
         public ResponseDTO userInfoAudit(int Id)
@@ -148,7 +149,7 @@ namespace WebAPI3.Controllers
                 Type = SqlExecuteType.INSERT
             });
 
-            SqlAdapter.ExecuteBatch(ibs);//事务批处理sql语句
+            BuilderFactory.Default().ExecuteBatch(ibs);//事务批处理sql语句
 
         }
          [HttpGet, Route("api/userinfo/UserInsert2")]
